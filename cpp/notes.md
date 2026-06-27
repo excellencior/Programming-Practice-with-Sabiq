@@ -282,3 +282,172 @@ Use **two indexes**: `arr[row][col]`
 ```cpp
 cout << arr[1][1] << endl; // Output: 4 (Row-2 Col-2 in human language)
 ```
+
+### User Input (cin)
+In **python**, you use `input()` to take user input. In **C++**, you use `cin`.
+
+```python
+name = input("Please enter your name: ")
+```
+```cpp
+string name;
+cout << "Please enter your name: ";
+cin >> name;
+cout << "Your name is: " << name << endl;
+```
+
+**Key difference**: In **python**, `input()` prints the prompt and reads the value in one line. In **C++**, you first print the prompt using `cout`, then read the value using `cin >>`.
+
+### If / Else
+
+#### Syntax
+```python
+if condition:
+    ...
+elif condition:
+    ...
+else:
+    ...
+```
+```cpp
+if (condition) {
+    ...
+} else if (condition) {
+    ...
+} else {
+    ...
+}
+```
+
+**Differences**
+1. In **python**, you use `elif`. In **C++**, you use `else if`.
+2. In **C++**, conditions go inside **parentheses** `()` and the body goes inside **curly braces** `{}`.
+
+#### True and False in C++
+In **python**, `True` / `False` are just boolean values. But in **C++**:
+- **0** is considered **false**
+- Any **non-zero** value is considered **true**
+
+```cpp
+if (0) {
+    cout << "Will NOT print" << endl; // 0 = false
+}
+
+if (-4) {
+    cout << "WILL print" << endl; // -4 is non-zero = true
+}
+```
+
+#### Comparing Values
+You can use `==` to compare values, just like in python.
+
+```cpp
+string name;
+cout << "Please enter your name: "; cin >> name;
+if (name == "John") {
+    cout << "Good morning, John!" << endl;
+} else if (name == "David") {
+    cout << "How are you, David?" << endl;
+} else {
+    cout << "Good morning to me!!" << endl;
+}
+```
+
+#### Not Operator (!)
+The `!` operator **inverts** a boolean value. Same as `not` in python.
+
+```cpp
+if (!false) {
+    cout << "This is not false" << endl; // Will print, because !false = true
+}
+```
+
+### Loops
+
+#### For Loop
+```python
+for i in range(4):
+    print(i)
+```
+```cpp
+for (int i = 0; i < 4; i++) {
+    cout << i << endl;
+}
+```
+
+A **C++ for loop** has 3 parts: `for (declaration; condition; increment)`
+1. **Declaration** — create an index variable (e.g. `int i = 0`). This variable only exists **inside** the loop.
+2. **Condition** — the loop runs as long as this is true (e.g. `i < 4`).
+3. **Increment** — what happens after each step (e.g. `i++` means i = i + 1).
+
+**Example**: Print the last character of each student's name.
+```cpp
+string students[] = {"Alice", "Bob", "Charlie", "Cameron"};
+for (int i = 0; i < 4; i++) {
+    int last_idx = students[i].size() - 1;
+    cout << students[i][last_idx] << endl;
+}
+```
+
+#### While Loop
+```python
+i = 0
+while i < 4:
+    print(i)
+    i += 1
+```
+```cpp
+int i = 0;
+while (i < 4) {
+    cout << i << endl;
+    i++;
+}
+```
+
+**Difference from for loop**: In a while loop, you declare the variable **before** the loop, and increment it **inside** the loop body.
+
+**Example**: Take names from user input and print them.
+```cpp
+int limit = 4, i = 0;
+string name;
+string names[limit];
+while (i < limit) {
+    cout << (i+1) << ". Please enter your name: "; cin >> name;
+    names[i] = name;
+    i++;
+}
+```
+
+#### break and continue
+- **break** — stops the loop completely and exits out of it.
+- **continue** — skips the rest of the current step and jumps to the next step.
+
+```cpp
+while (true) { // Infinite loop
+    string cmd;
+    cout << "Enter Yes/No/Exit: "; cin >> cmd;
+
+    if (cmd == "Exit") {
+        break; // Stop the loop
+    } else if (cmd == "Invalid") {
+        continue; // Skip everything below, go to next step
+    }
+
+    cout << "You entered: " << cmd << endl;
+}
+```
+
+In **python**, `break` and `continue` work the **exact same way**.
+
+## Terminal Commands to run the Sciprts
+For python, it's the simplest there is:
+```bash
+python <python_script_name>
+```
+
+for CPP:
+```bash
+g++ <cpp_sciprt_name> -o main
+./main
+```
+You first need to create an object by executing your CPP code first, then execute your object in the OS
