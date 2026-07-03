@@ -14,7 +14,7 @@ int main() {
     // }
 
     if (true) {
-        cout << "The condition is true" << endl;
+        cout << "The condition is true";
     }
 
     if (false) {

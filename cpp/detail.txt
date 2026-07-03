@@ -1,0 +1,16 @@
+void recurOpenDoll(int i) {
+    if (i == 4) {
+        cout << "There's no doll anymore" << endl;
+        return;
+    }
+
+    cprint(i);
+    recurOpenDoll(i+1);
+}
+
+--- Call Stack ---
+return
+recurOpenDoll(i+3);
+recurOpenDoll(i+2);
+recurOpenDoll(i+1);
+recurOpenDoll(i);
