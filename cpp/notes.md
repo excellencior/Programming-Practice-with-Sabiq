@@ -439,6 +439,236 @@ while (true) { // Infinite loop
 
 In **python**, `break` and `continue` work the **exact same way**.
 
+### Functions (in detail)
+
+We touched on functions earlier, but let's go deeper now.
+
+#### Syntax
+```python
+def greet(name):
+    print("Hello " + name)
+```
+```cpp
+void greet(string name) {
+    cout << "Hello " << name << endl;
+}
+```
+
+A **C++ function** looks like this:
+```
+<return-type> <function-name>(param-list) {
+    ... function body ...
+    return <value>;
+}
+```
+
+#### Return Types
+The return type tells C++ what kind of data the function gives back.
+
+- **void** — the function doesn't return anything, it just does something (like printing).
+- **int** — the function returns an integer.
+- **bool** — the function returns true or false.
+- **string** — the function returns a string.
+
+In **python**, you don't need to specify a return type. The function can return anything or nothing.
+
+#### Functions with bool Return Type
+A `bool` function is useful when you need to check a condition.
+
+```cpp
+bool isEven(int num) {
+    return num % 2 == 0; // If remainder is 0, it's even (true), otherwise false
+}
+```
+
+You can use it like this:
+```cpp
+for (int i = 1; i <= 40; i++) {
+    if (isEven(i)) cout << i << " is even" << endl;
+}
+```
+
+Another example, checking if a number is prime:
+```cpp
+bool isPrime(int num) {
+    for (int i = 2; i < num; i++) {
+        if (num % i == 0) return false; // Divisible by something other than 1 and itself
+    }
+    return true;
+}
+```
+
+The algorithm: divide the number by every number from 2 to num-1. If any of them divides it evenly, it's not a prime.
+
+#### Passing Arrays to Functions
+You can pass an array to a function. But you also need to pass the **size**, because C++ doesn't know the array size inside the function.
+
+```cpp
+int sum(int arr[], int n) {
+    int s = 0;
+    for (int i = 0; i < n; i++) {
+        s += arr[i];
+    }
+    return s;
+}
+```
+
+Calling it from main:
+```cpp
+int arr1[] = {1, 2, 3, 4};
+cout << sum(arr1, 4) << endl; // Output: 10
+```
+
+In **python**, you don't need to pass the size because `len()` works inside the function.
+
+#### Ternary Operator
+A shortcut for simple if/else that returns a value.
+
+```cpp
+// Long way
+if (num % 2 == 0) return true;
+else return false;
+
+// Short way using ternary
+return num % 2 == 0 ? true : false;
+```
+
+The format is: `<condition> ? <value if true> : <value if false>`
+
+In **python**, the equivalent is: `True if num % 2 == 0 else False`
+
+### Nested Function Calls
+
+A function can call another function, which can call another function, and so on. Think of it like **Russian dolls** — you open one doll and there's a smaller doll inside.
+
+```cpp
+void cprint(int dollNo) {
+    cout << "You opened doll - " << dollNo << endl;
+}
+
+void openDoll3(int i) {
+    cprint(i);
+    // No more dolls to open
+}
+
+void openDoll2(int i) {
+    cprint(i);
+    openDoll3(i+1); // Opens the next doll
+}
+
+void openDoll1(int i) {
+    cprint(i);
+    openDoll2(i+1); // Opens the next doll
+}
+```
+
+Calling `openDoll1(1)` will print:
+```
+You opened doll - 1
+You opened doll - 2
+You opened doll - 3
+```
+
+This works, but writing a separate function for each doll is not practical. What if you have 100 dolls? That's where **recursion** comes in.
+
+### Recursion
+
+Recursion is when a **function calls itself**. It's like having one `openDoll` function that keeps opening the next doll until there are no more dolls left.
+
+```cpp
+void recurOpenDoll(int i) {
+    if (i == 4) { // Base condition: stop here
+        cout << "There's no doll anymore" << endl;
+        return; // Stop and start going back
+    }
+
+    cprint(i);
+    recurOpenDoll(i+1); // Call itself with the next doll number
+}
+```
+
+Two important things about recursion:
+1. **Base condition** — the condition that tells the function to **stop calling itself**. Without this, it would run forever (and crash).
+2. **Recursive call** — the function calls itself with a slightly different input (usually moving closer to the base condition).
+
+In **python**, recursion works the same way:
+```python
+def recur_open_doll(i):
+    if i == 4:
+        print("There's no doll anymore")
+        return
+    print(f"You opened doll - {i}")
+    recur_open_doll(i + 1)
+```
+
+### Nested Loops
+
+You can put a loop inside another loop. This is very useful for working with **2D arrays**.
+
+#### Printing a 2D Array
+```cpp
+int arr[][4] = {
+    {1, 2, 3, 4},
+    {5, 6, 7, 8}
+};
+
+for (int i = 0; i < 2; i++) {         // Loop through rows
+    for (int j = 0; j < 4; j++) {     // Loop through columns
+        cout << arr[i][j] << ' ';
+    }
+    cout << endl;
+}
+```
+
+**Output:**
+```
+1 2 3 4
+5 6 7 8
+```
+
+The outer loop goes through each **row**. For each row, the inner loop goes through each **column**. This is how you visit every single element in a 2D array.
+
+#### Mixing While and For Loops
+You can mix different types of loops. Here's an example that takes attendance for multiple classes:
+
+```cpp
+string students[][4] = {
+    {"Alan", "John", "Bob", "Rick"},   // class 1
+    {"Kirk", "Josh", "Max", "Clip"}    // class 2
+};
+int attendance[2][4];
+int classNo = 0;
+
+while (classNo < 2) {                  // While loop for classes
+    for (int id = 0; id < 4; id++) {   // For loop for students
+        if (id % 2 == 0) {
+            attendance[classNo][id] = 1; // Present
+        } else {
+            attendance[classNo][id] = 0; // Absent
+        }
+    }
+    classNo++;
+}
+```
+
+Then print the attendance:
+```cpp
+for (int i = 0; i < 2; i++) {
+    cout << "Class-" << i+1 << ": ";
+    for (int j = 0; j < 4; j++) {
+        cout << attendance[i][j] << ' ';
+    }
+    cout << endl;
+}
+```
+
+**Output:**
+```
+Class-1: 1 0 1 0
+Class-2: 1 0 1 0
+```
+
+
 ## Terminal Commands to run the Sciprts
 For python, it's the simplest there is:
 ```bash
