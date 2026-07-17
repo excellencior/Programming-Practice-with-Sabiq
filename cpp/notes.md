@@ -668,6 +668,242 @@ Class-1: 1 0 1 0
 Class-2: 1 0 1 0
 ```
 
+### STL (Standard Template Library)
+
+**STL** stands for **Standard Template Library**. Think of a library as a storage of knowledge that you can use for various tasks. In C++, STL gives you ready-made data structures (like vectors, sets, maps etc.) with built-in functions.
+
+In **python**, you already have lists, sets, dictionaries etc. built into the language. In **C++**, you get similar things through STL, but you need to `#include` them.
+
+### Vectors
+
+A **vector** is like an array, but smarter. The key differences:
+
+1. You **don't need to specify the size** before using it. It grows and shrinks on its own.
+2. It has **dynamic memory allocation**, meaning it allocates more memory as you keep adding data.
+3. It comes with **built-in functions** like `push_back()`, `pop_back()`, `size()`, etc.
+
+You need to `#include <vector>` to use vectors.
+
+#### Declaring a Vector
+```cpp
+vector<int> vec;         // Empty integer vector
+vector<string> names;    // Empty string vector
+```
+
+Compare to arrays:
+```cpp
+int arr[10];             // Must specify size
+```
+
+In **python**, this is just a list:
+```python
+vec = []
+```
+
+#### Adding Data (push_back)
+```cpp
+vec.push_back(1); // [1]
+vec.push_back(2); // [1, 2]
+vec.push_back(3); // [1, 2, 3]
+```
+
+In **python**: `vec.append(1)`
+
+#### Removing Data (pop_back)
+`pop_back()` removes the **last** element.
+
+```cpp
+vec.pop_back(); // [1, 2, 3] => [1, 2]
+vec.pop_back(); // [1, 2] => [1]
+```
+
+#### Accessing Data
+Just like arrays, use index `[]`:
+```cpp
+vec[0] = 100; // Modify first element
+cout << vec[0] << endl; // Read first element
+```
+
+You can also use:
+```cpp
+cout << vec.front() << endl; // First element
+cout << vec.back() << endl;  // Last element
+```
+
+#### Checking if Empty
+Before doing operations like `pop_back()`, it's good practice to check if the vector is empty:
+```cpp
+if (!vec.empty()) {
+    vec.pop_back();
+}
+```
+
+#### Initializing with Values
+```cpp
+vector<int> nums = {1, 2, 3, 4};
+```
+
+#### Clearing Everything
+```cpp
+nums.clear(); // Removes all elements, vector is now empty
+```
+
+#### Taking User Input into a Vector
+```cpp
+int n = 5;
+vector<int> data;
+for (int i = 0; i < n; i++) {
+    int x; cin >> x;
+    data.push_back(x);
+}
+```
+
+#### Vectors of Different Types
+```cpp
+vector<float> fvec;
+fvec.push_back(3.14);
+
+vector<string> stvec;
+stvec.push_back("Sabiq");
+stvec.push_back("John");
+```
+
+#### 2D Vectors
+A vector of vectors, just like a 2D array but dynamic.
+
+```cpp
+vector<vector<int>> grid;
+vector<int> row1 = {1, 2};
+vector<int> row2 = {3, 4};
+grid.push_back(row1);
+grid.push_back(row2);
+```
+
+### Enhanced For Loop
+
+A shorter way to loop through STL containers (vectors, sets, etc). Instead of using an index, you directly get each element.
+
+```cpp
+// Regular for loop
+for (int i = 0; i < vec.size(); i++) {
+    cout << vec[i] << ' ';
+}
+
+// Enhanced for loop (does the same thing, but cleaner)
+for (int v: vec) {
+    cout << v << ' ';
+}
+```
+
+In **python**, this is just the normal for loop:
+```python
+for v in vec:
+    print(v)
+```
+
+Works with any data type:
+```cpp
+for (string name: names) { ... }
+for (float f: floats) { ... }
+```
+
+### Function Overloading
+
+In **C++**, you can have **multiple functions with the same name** as long as they take **different parameter types**. The compiler figures out which one to call based on what you pass.
+
+```cpp
+void print(vector<int> vec) {
+    for (int v: vec) cout << v << ' ';
+    cout << endl;
+}
+
+void print(vector<string> stvec) {
+    for (string v: stvec) cout << v << ' ';
+    cout << endl;
+}
+
+void print(vector<vector<int>> vec2d) {
+    for (vector<int> row: vec2d) {
+        print(row); // Calls the vector<int> version
+    }
+}
+```
+
+Now you can call `print()` with any of these types and C++ picks the right one. This is **not possible in python** since python doesn't have strict types.
+
+### Sets
+
+A **set** stores **unique** data only (no duplicates) and keeps elements **sorted automatically**.
+
+You need to `#include <set>` to use sets.
+
+In **python**, sets work very similarly:
+```python
+s = set()
+s.add(3)
+```
+
+#### Declaring a Set
+```cpp
+set<int> nums;
+```
+
+#### Inserting Data
+```cpp
+nums.insert(3);
+nums.insert(4);
+nums.insert(5);
+nums.insert(5); // Duplicate, will be ignored
+nums.insert(2); // Will be placed in sorted position
+// nums is now: {2, 3, 4, 5}
+```
+
+Notice: even though we inserted 5 twice, the set only keeps one copy. And even though 2 was inserted last, the set sorts it to the front.
+
+#### Removing Data
+```cpp
+nums.erase(4); // Removes the value 4
+// nums is now: {2, 3, 5}
+```
+
+#### Checking if Empty and Clearing
+```cpp
+if (!nums.empty()) {
+    nums.erase(3);
+}
+
+nums.clear(); // Removes everything
+```
+
+#### Finding Data
+```cpp
+auto itr = nums.find(3);
+if (itr != nums.end()) {
+    cout << "Found: " << *itr << endl;
+} else {
+    cout << "Not found" << endl;
+}
+```
+
+`find()` returns an **iterator** (a pointer-like thing). If the element is not found, it returns `set.end()`. We'll learn more about iterators and pointers later.
+
+### The auto Keyword
+
+`auto` lets C++ **figure out the type for you** automatically based on the value you assign.
+
+```cpp
+auto a = 10;       // int
+auto b = 10.10;    // double
+auto c = "John";   // const char* (a C-style string)
+```
+
+It's especially useful when the type is long or complex, like with iterators:
+```cpp
+auto itr = nums.find(3); // Instead of writing: set<int>::iterator itr = nums.find(3);
+```
+
+In **python**, every variable is basically `auto` since you never specify types.
+
 
 ## Terminal Commands to run the Sciprts
 For python, it's the simplest there is:
