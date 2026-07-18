@@ -904,6 +904,249 @@ auto itr = nums.find(3); // Instead of writing: set<int>::iterator itr = nums.fi
 
 In **python**, every variable is basically `auto` since you never specify types.
 
+### Pairs
+
+A **pair** is a mini collection that holds exactly **two** values. The two values can be of different types.
+
+Think of it as a way to glue two pieces of data together, like a student's name and their ID.
+
+#### Creating a Pair
+There are multiple ways:
+
+```cpp
+// a) Constructor
+pair<string, int> student1("John", 10);
+
+// b) Brace initialization (recommended)
+pair<string, int> student2 = {"John", 10};
+
+// c) Using make_pair
+auto student3 = make_pair("John", 10);
+
+// d) Declare first, assign later
+pair<string, int> student4;
+student4.first = "John";
+student4.second = 10;
+```
+
+#### Accessing Pair Values
+Use `.first` and `.second`:
+```cpp
+cout << student1.first << endl;  // John
+cout << student1.second << endl; // 10
+```
+
+#### Updating a Pair
+```cpp
+student2.first = "Mary";
+student2.second = 20;
+```
+
+In **python**, you'd use a tuple for something similar: `student = ("John", 10)`
+
+#### Pairs with Vectors
+You can create a vector of pairs to store a list of related data.
+
+```cpp
+vector<pair<string, int>> students;
+students.push_back({"Mary", 2});
+students.push_back({"David", 3});
+students.push_back({"John", 1});
+```
+
+Print them using an enhanced for loop:
+```cpp
+for (pair<string, int> p: students) {
+    cout << p.first << ' ' << p.second << endl;
+}
+```
+
+#### Pairs with Sets
+A set of pairs sorts by the **first** value alphabetically. If `first` is the same, it sorts by `second`.
+
+```cpp
+set<pair<string, int>> students_set;
+students_set.insert({"John", 2});
+students_set.insert({"Mary", 1});
+students_set.insert({"David", 3});
+// Sorted by name: David, John, Mary (D < J < M in ASCII)
+```
+
+You can erase a pair from a set:
+```cpp
+students_set.erase({"David", 3});
+```
+
+### Type Aliases (typedef and using)
+
+When types get long (like `vector<pair<string, int>>`), typing them out every time is painful. You can create a **short name** (alias) for a type.
+
+#### Legacy Way (typedef)
+```cpp
+typedef vector<int> vi;
+typedef vector<string> vs;
+```
+
+#### Modern Way (using) — recommended
+```cpp
+using vi = vector<int>;
+using vs = vector<string>;
+using vd = vector<double>;
+```
+
+Now instead of writing:
+```cpp
+vector<int> ids;
+vector<string> names;
+```
+
+You can write:
+```cpp
+vi ids;
+vs names;
+```
+
+Both work the exact same way, it's just shorter to type. In **python**, you don't have this problem because types are never written out.
+
+### Templates
+
+Templates let you write **one function that works with any data type**. Instead of writing separate `print()` functions for `vector<int>`, `vector<string>`, `vector<double>`, etc., you write it once using a placeholder type.
+
+#### Why Templates?
+Without templates, you'd need function overloading:
+```cpp
+void print(vector<int> v) { ... }
+void print(vector<string> v) { ... }
+void print(vector<double> v) { ... }
+// Tedious!
+```
+
+#### Single Type Template
+```cpp
+template<typename T>
+void print(vector<T> v) {
+    for (T item: v) {
+        cout << item << ' ';
+    }
+    cout << endl;
+}
+```
+
+`T` is a placeholder. When you call `print(some_int_vector)`, C++ replaces `T` with `int`. When you call `print(some_string_vector)`, it replaces `T` with `string`. One function, works for everything.
+
+```cpp
+vector<int> ids = {1, 2, 3};
+vector<string> names = {"John", "Mary"};
+print(ids);    // T becomes int
+print(names);  // T becomes string
+```
+
+#### Multiple Type Template
+You can use more than one placeholder:
+```cpp
+template<typename T1, typename T2>
+void display(T1 a, T2 b) {
+    cout << a << ' ' << b << endl;
+}
+```
+
+Now you can pass any combination of types:
+```cpp
+display("John", 1);      // T1 = string, T2 = int
+display(50, 50.5);        // T1 = int, T2 = double
+display(4, 'A');          // T1 = int, T2 = char
+```
+
+#### Template with Pairs
+```cpp
+template<typename a, typename b>
+void print(vector<pair<a, b>> vp) {
+    for (pair<a, b> p: vp) {
+        cout << p.first << ' ' << p.second << endl;
+    }
+}
+```
+
+This works with `vector<pair<string, int>>`, `vector<pair<string, string>>`, or any other pair combination.
+
+In **python**, templates aren't needed because python doesn't care about types. Every function already works with any type.
+
+### Algorithms
+
+The `<algorithm>` library gives you **ready-made functions** for common tasks like sorting, searching, counting, etc. You need to `#include <algorithm>` to use them.
+
+An algorithm is just a **specified set of steps to follow in order to accomplish a task**.
+
+#### sort()
+Sorts a container in **ascending order** by default.
+
+```cpp
+vector<int> ids = {5, 8, 3, 1, 8, 5};
+sort(ids.begin(), ids.end());
+// ids is now: {1, 3, 5, 5, 8, 8}
+```
+
+`begin()` and `end()` are iterators that point to the start and end of the container. Most algorithm functions need these.
+
+In **python**: `ids.sort()` or `sorted(ids)`
+
+#### count()
+Counts how many times a value appears.
+
+```cpp
+int cnt = count(ids.begin(), ids.end(), 5);
+cout << "Count of 5: " << cnt << endl; // 2
+```
+
+In **python**: `ids.count(5)`
+
+#### max_element()
+Returns an iterator pointing to the **largest** element. Use `*` to get the actual value.
+
+```cpp
+int max_val = *max_element(ids.begin(), ids.end());
+cout << "Max: " << max_val << endl; // 8
+```
+
+In **python**: `max(ids)`
+
+#### reverse()
+Reverses the order of elements.
+
+```cpp
+vector<string> names = {"John", "David", "Tim", "Amanda"};
+reverse(names.begin(), names.end());
+// names is now: {"Amanda", "Tim", "David", "John"}
+```
+
+In **python**: `names.reverse()` or `names[::-1]`
+
+#### Custom Comparator (Custom Sort Order)
+By default, `sort()` goes ascending. To sort differently, you write a **comparator function** that tells `sort()` how to compare two elements.
+
+For **descending** order:
+```cpp
+bool compare(string a, string b) {
+    return a > b; // "greater than" means descending
+}
+
+sort(names.begin(), names.end(), compare);
+```
+
+#### Sorting Pairs with Custom Comparator
+You can sort a vector of pairs by the **second** value instead of the first:
+
+```cpp
+bool compare_ids(pair<string, int> a, pair<string, int> b) {
+    return a.second < b.second; // Sort by student ID (ascending)
+}
+
+vector<pair<string, int>> students = {{"Mary", 2}, {"David", 3}, {"John", 1}, {"Tim", 4}};
+sort(students.begin(), students.end(), compare_ids);
+// Now sorted by ID: John(1), Mary(2), David(3), Tim(4)
+```
+
+
 
 ## Terminal Commands to run the Sciprts
 For python, it's the simplest there is:
