@@ -1145,7 +1145,217 @@ vector<pair<string, int>> students = {{"Mary", 2}, {"David", 3}, {"John", 1}, {"
 sort(students.begin(), students.end(), compare_ids);
 // Now sorted by ID: John(1), Mary(2), David(3), Tim(4)
 ```
+### Maps (map and unordered_map)
 
+A **map** stores data in **Key-Value pairs** (like a dictionary). Every key must be unique, and it maps to a specific value.
+
+In **Python**, this is a `dict`. In **C++**, we have two types of maps:
+1. `map` — keeps the keys **automatically sorted** (e.g. A to Z for strings, ascending for numbers).
+2. `unordered_map` — does **NOT** sort keys. Uses a hash table for faster average lookups.
+
+Header files:
+```cpp
+#include <map>
+#include <unordered_map>
+```
+
+#### 1. Creating and Inserting Data
+```cpp
+map<string, int> db;
+
+// Method 1: Using [] operator
+db["John"] = 100;
+
+// Method 2: Using .insert()
+db.insert({"Mary", 200});
+db.insert(make_pair("Bob", 300));
+```
+
+In **Python**:
+```python
+db = {}
+db["John"] = 100
+db["Mary"] = 200
+```
+
+#### 2. Accessing & The Important Map Gotcha! ⚠️
+```cpp
+cout << db["John"] << endl; // Output: 100
+cout << db.at("Mary") << endl; // Output: 200
+```
+
+> **CRITICAL GOTCHA**: If you try to read a key using `db["NonExistentKey"]`, C++ will **automatically insert** that non-existent key into the map with a default value (e.g., `0` for numbers, `""` for strings)!
+> To avoid accidentally mutating your map, check if a key exists first or use `db.at("key")`.
+
+#### 3. Checking if a Key Exists
+There are two ways to check existence without accidentally inserting a new key:
+
+**Method 1: Using `.find()`**
+`find()` returns `map.end()` if the key is not found.
+```cpp
+if (db.find("Bob") != db.end()) {
+    cout << "Found Bob!" << endl;
+}
+```
+
+**Method 2: Using `.count()`**
+`count()` returns `1` if the key exists, or `0` if it doesn't.
+```cpp
+if (db.count("Bob") != 0) {
+    cout << "Found Bob!" << endl;
+}
+```
+
+In **Python**: `if "Bob" in db:`
+
+#### 4. Removing Data
+```cpp
+db.erase("Bob"); // Removes "Bob" and his value
+```
+
+In **Python**: `del db["Bob"]` or `db.pop("Bob")`
+
+#### 5. Clearing and Checking Empty
+```cpp
+db.clear(); // Removes all key-value pairs
+
+if (db.empty()) {
+    cout << "Map is empty!" << endl;
+}
+```
+
+#### 6. Iterating Through a Map
+You can iterate through a map using an enhanced `for` loop. Each element is a `pair` where `.first` is the **key** and `.second` is the **value**.
+
+```cpp
+map<string, int> scores = {{"Alice", 95}, {"Bob", 80}, {"Charlie", 88}};
+
+for (auto data : scores) {
+    cout << data.first << ": " << data.second << endl;
+}
+```
+Because it's a `map`, the output will be sorted alphabetically by key:
+```
+Alice: 95
+Bob: 80
+Charlie: 88
+```
+
+For an `unordered_map`, keys won't be sorted:
+```cpp
+unordered_map<string, int> umap;
+umap["John"] = 10;
+umap["Bob"] = 40;
+umap["Mary"] = 30;
+
+for (auto data : umap) {
+    cout << data.first << ": " << data.second << endl; // Arbitrary order
+}
+```
+
+---
+
+### Queue
+
+A **queue** follows the **FIFO (First In, First Out)** principle. Think of a line at a coffee shop or counter — the first person to join the line is the first person served!
+
+Header file: `#include <queue>`
+
+#### Creating and Operating a Queue
+```cpp
+queue<string> q;
+
+// 1. Push elements (adds to the BACK of the line)
+q.push("P1");
+q.push("P2");
+q.push("Sabiq");
+
+// 2. Access front and back
+cout << q.front() << endl; // Output: "P1" (First in line)
+cout << q.back() << endl;  // Output: "Sabiq" (Last in line)
+
+// 3. Pop elements (removes from the FRONT of the line)
+q.pop(); // Removes "P1"
+
+cout << q.front() << endl; // Output: "P2"
+```
+
+In **Python**:
+```python
+from collections import deque
+q = deque()
+q.append("P1")
+q.append("P2")
+q.popleft() # Removes "P1"
+```
+
+#### Key Properties & Gotchas of Queue
+- `q.pop()` returns `void`! It **removes** the front item but does **not** return its value. You must call `q.front()` before calling `q.pop()`.
+- Queue **does NOT support indexing** like `q[0]` or iteration like `for (auto x : q)`.
+- To print or inspect a queue without destroying original data, create a **copy** of the queue and loop while `!copy.empty()`:
+
+```cpp
+template<typename T>
+void printQueue(queue<T> gq) {
+    queue<T> copy(gq); // Make a copy
+    while (!copy.empty()) {
+        cout << copy.front() << ' ';
+        copy.pop(); // Remove front from copy
+    }
+    cout << endl;
+}
+```
+
+---
+
+### Stack
+
+A **stack** follows the **LIFO (Last In, First Out)** principle. Think of a stack of plates or a dish rack — the last plate you put on top is the first one you take off!
+
+Header file: `#include <stack>`
+
+#### Creating and Operating a Stack
+```cpp
+stack<string> s;
+
+// 1. Push elements (places on TOP of the stack)
+s.push("Plate 1");
+s.push("Plate 2");
+s.push("Plate 3");
+
+// 2. Access top element
+cout << s.top() << endl; // Output: "Plate 3"
+
+// 3. Pop element (removes from TOP)
+s.pop(); // Removes "Plate 3"
+
+cout << s.top() << endl; // Output: "Plate 2"
+```
+
+In **Python**:
+```python
+s = []
+s.append("Plate 1")
+s.append("Plate 2")
+s.pop() # Removes "Plate 2"
+```
+
+#### Key Properties & Gotchas of Stack
+- `s.pop()` returns `void`! You must call `s.top()` first if you want the value.
+- Stack **does NOT support indexing** like `s[0]` or iteration like `for (auto x : s)`.
+- Calling `s.top()` or `s.pop()` on an **empty** stack causes a crash (segmentation fault / undefined behavior)! Always check `!s.empty()` first.
+- To print or inspect a stack, make a copy and loop while `!copy.empty()`:
+
+```cpp
+template<typename T>
+void printStack(stack<T> gs) {
+    stack<T> copy(gs);
+    while (!copy.empty()) {
+        cout << copy.top() << endl;
+        copy.pop();
+    }
+}
+```
 
 
 ## Terminal Commands to run the Sciprts
